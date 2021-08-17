@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -35,13 +37,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val scrollState = rememberScrollState()
-            Column(
-                modifier = Modifier.verticalScroll(scrollState)
-            ) {
-                for(i in 1..50) {
+            LazyColumn {
+                // equivalent to each loop
+                itemsIndexed(
+                    listOf("This", "is", "Jetpack", "Compose")
+                ) { index, string ->
                     Text(
-                        text = "Item $i",
+                        text = string,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
