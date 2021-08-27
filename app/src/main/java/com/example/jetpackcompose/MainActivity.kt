@@ -3,6 +3,17 @@ package com.example.jetpackcompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
@@ -21,6 +33,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,34 +57,53 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val constraints = ConstraintSet {
-                val greenBox = createRefFor("greenbox")
-                val redBox = createRefFor("redbox")
-                val guideline = createGuidelineFromTop(0.5f)
-
-                constrain(greenBox) {
-                    top.linkTo(guideline)
-                    start.linkTo(parent.start)
-                    width = Dimension.value(100.dp)
-                    height = Dimension.value(100.dp)
-                }
-
-                constrain(redBox) {
-                    top.linkTo(parent.top)
-                    start.linkTo(greenBox.end)
-                    width = Dimension.value(100.dp)
-                    height = Dimension.value(100.dp)
-                }
-
-                createHorizontalChain(greenBox, redBox, chainStyle = ChainStyle.Packed)
+            var sizeState by remember {
+                mutableStateOf(200.dp)
             }
-            ConstraintLayout(constraints, modifier = Modifier.fillMaxSize()) {
-                Box(modifier = Modifier
-                    .background(Color.Green)
-                    .layoutId("greenbox"))
-                Box(modifier = Modifier
-                    .background(Color.Red)
-                    .layoutId("redbox"))
+            val size by animateDpAsState(
+                targetValue = sizeState,
+
+                // Tween Animation
+//                animationSpec = tween(
+//                    durationMillis = 1000,
+//                    delayMillis = 300,
+//                    easing = LinearEasing
+//                )
+
+                // Bouncy Animation
+//                spring(
+//                    Spring.DampingRatioHighBouncy
+//                )
+
+                // Keyframes Animation
+//                keyframes {
+//                    durationMillis = 5000
+//                    sizeState at 0 with LinearEasing
+//                    sizeState * 1.5f at 1000 with FastOutLinearInEasing
+//                    sizeState * 2f at 5000
+//                }
+                tween(
+                    durationMillis = 1000
+                )
+            )
+            val infiniteTransition = rememberInfiniteTransition()
+            val color by infiniteTransition.animateColor(
+                initialValue = Color.Red,
+                targetValue = Color.Green,
+                animationSpec = infiniteRepeatable(
+                    tween(durationMillis = 2000),
+                    repeatMode = RepeatMode.Reverse
+                )
+            )
+            Box(modifier = Modifier
+                .size(size)
+                .background(color),
+            contentAlignment = Alignment.Center) {
+                Button(onClick = {
+                    sizeState += 50.dp
+                }) {
+                    Text(text = "Increase Size")
+                }
             }
         }
     }
