@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                         .background(Color.Blue),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressBar(percentage = 0.75f, number = 100)
+                    CircularProgressBar(percentage = 0.45f, number = 100)
                 }
             }
         }
