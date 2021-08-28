@@ -116,6 +116,17 @@ fun CircularProgressBar(
 
 @Preview
 @Composable
+fun FullScreen() {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        RedCircularPreview()
+        BlueCircularPreview()
+    }
+}
+
+@Preview
+@Composable
 fun RedCircularPreview() {
     Box(
         modifier = Modifier
