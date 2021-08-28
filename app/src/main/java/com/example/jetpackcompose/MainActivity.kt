@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -110,5 +111,33 @@ fun CircularProgressBar(
             fontSize = fontSize,
             fontWeight = FontWeight.Bold
         )
+    }
+}
+
+@Preview
+@Composable
+fun RedCircularPreview() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(250.dp)
+            .background(Color.Red),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressBar(percentage = 0.75f, number = 100)
+    }
+}
+
+@Preview
+@Composable
+fun BlueCircularPreview() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(250.dp)
+            .background(Color.Blue),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressBar(percentage = 0.75f, number = 100)
     }
 }
